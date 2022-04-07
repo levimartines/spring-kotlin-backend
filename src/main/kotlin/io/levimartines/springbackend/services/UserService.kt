@@ -1,0 +1,23 @@
+package io.levimartines.springbackend.services
+
+import io.levimartines.springbackend.models.entities.User
+import io.levimartines.springbackend.models.vos.UserVO
+import io.levimartines.springbackend.repositories.UserRepository
+import mu.KotlinLogging
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.stereotype.Service
+
+@Service
+class UserService(
+    private val repository: UserRepository,
+    private val encoder: BCryptPasswordEncoder
+) {
+    private val logger = KotlinLogging.logger {}
+
+    fun save(userVO: UserVO): User {
+        val encryptedPassword = encoder.encode(userVO.password)
+        val user = User(null, userVO.name, userVO.email, encryptedPassword)
+        logger.info { "Creating User for email: ${userVO.email}" }
+        return repository.save(user)
+    }
+}
