@@ -12,3 +12,6 @@ logging:
 jwt:
   secret: yourSecretHere
   expiration: 86400000
+
+settings:
+  frontend-url: http://localhost:3000
