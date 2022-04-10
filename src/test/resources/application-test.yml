@@ -7,7 +7,7 @@ spring:
 ### LOGGING ###
 logging:
   level:
-    root: info
+    root: debug
 
 jwt:
   secret: testSecret

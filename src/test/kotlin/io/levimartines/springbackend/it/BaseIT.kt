@@ -12,7 +12,10 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
+
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -22,6 +25,16 @@ class BaseIT @Autowired constructor(
     val encoder: BCryptPasswordEncoder
 ) {
     protected var defaultUser: User? = null
+
+    companion object {
+        @Container
+        val postgresDB = PostgreSQLContainer<Nothing>("postgres:13.2")
+            .apply {
+                withDatabaseName("postgres")
+                withUsername("postgres")
+                withPassword("postgres")
+            }
+    }
 
     @BeforeEach
     fun setup() {
