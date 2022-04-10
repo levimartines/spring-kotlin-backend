@@ -6,25 +6,21 @@ import io.levimartines.springbackend.models.vos.UserVO
 import io.levimartines.springbackend.repositories.UserRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.testcontainers.junit.jupiter.Testcontainers
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class LoginControllerIT @Autowired constructor(
-    protected val template: TestRestTemplate,
-    protected val userRepository: UserRepository
-) {
-
-    @BeforeEach
-    fun setup() {
-        userRepository.deleteAllInBatch();
-    }
+    template: TestRestTemplate,
+    userRepository: UserRepository,
+    encoder: BCryptPasswordEncoder
+) : BaseIT(template, userRepository, encoder) {
 
     @Test
     fun shouldRetriveTokenWhenLoginWithValidCredentials() {

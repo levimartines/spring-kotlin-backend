@@ -1,5 +1,6 @@
 package io.levimartines.springbackend.handlers
 
+import io.levimartines.springbackend.exceptions.AuthorizationException
 import io.levimartines.springbackend.exceptions.ObjectNotFoundException
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpServletRequest
 
 @ControllerAdvice
 class ControllerExceptionHandler {
-    private val logger = KotlinLogging.logger {}
 
     @ExceptionHandler(ObjectNotFoundException::class)
     fun objectNotFound(
@@ -27,6 +27,20 @@ class ControllerExceptionHandler {
             e.message, request.requestURI
         )
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body<StandardError>(err)
+    }
+
+    @ExceptionHandler(AuthorizationException::class)
+    fun authorization(
+        e: AuthorizationException,
+        request: HttpServletRequest
+    ): ResponseEntity<StandardError?>? {
+
+        val err = StandardError(
+            System.currentTimeMillis(),
+            HttpStatus.FORBIDDEN.value(), "Not allowed",
+            e.message, request.requestURI
+        )
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body<StandardError>(err)
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)

@@ -26,7 +26,7 @@ class SecurityConfig(val userDetailsService: UserDetailsServiceImpl, val jwtUtil
     WebSecurityConfigurerAdapter() {
 
     companion object {
-        val PUBLIC_MATCHERS_GET = arrayOf("/users")
+        val PUBLIC_MATCHERS_GET = arrayOf("/users/*")
         val PUBLIC_MATCHERS_POST = arrayOf("/users")
     }
 
